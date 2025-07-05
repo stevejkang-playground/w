@@ -1,0 +1,15 @@
+services:
+  server:
+    build:
+      dockerfile: Dockerfile.local
+      context: ./
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    volumes:
+      - ./src:/app/src
+    command:
+      - "npm"
+      - "run"
+      - "start:local:dev"

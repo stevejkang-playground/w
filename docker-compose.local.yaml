@@ -1,0 +1,35 @@
+services:
+  server:
+    build:
+      dockerfile: Dockerfile.local
+      context: ./
+    container_name: api
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - '80:80'
+    volumes:
+      - ./src:/app/src
+    command:
+      - "npm"
+      - "run"
+      - "start:local"
+
+  mysql:
+    container_name: api_mysql
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    restart: on-failure
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: api
+      MYSQL_USER: api
+      MYSQL_PASSWORD: apipass
+      TZ: Asia/Seoul
